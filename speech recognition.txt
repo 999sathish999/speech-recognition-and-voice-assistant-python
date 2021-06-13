@@ -1,0 +1,185 @@
+import os
+import warnings
+import pyttsx3 as p
+import randfacts
+import speech_recognition as sr
+import datetime
+from selenium import webdriver
+import requests
+import playsound as playsound
+
+warnings.filterwarnings("ignore")
+
+
+
+
+def Ab():
+    def open_application(input):
+        if "firefox" in input or "mozilla" in input:
+            speak("Opening Mozilla Firefox")
+            os.startfile('C:\Program Files\Mozilla Firefox\\firefox.exe')
+            return
+            a = Ab()
+            a.Ab()
+        elif "microsoft word" or "word" in input:
+            speak("Opening Microsoft Word")
+            os.startfile('C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Office\\Microsoft Word 2010')
+            return
+            a = Ab()
+            a.Ab()
+        elif "excel" in input:
+            speak("Opening Microsoft Excel")
+            os.startfile('C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Office\\Microsoft Excel 2010')
+            return
+            a = Ab()
+            a.Ab()
+        else:
+            speak("Application not available")
+            return
+            a = Ab()
+            a.Ab()
+    class infow():
+        def __init__(self):
+            self.driver = webdriver.Chrome(
+                executable_path='C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
+
+        def get_info(self, query):
+            self.query = query
+            self.driver.get(url="https://www.wikipedia.org")
+            search = self.driver.find_element_by_xpath('//*[@id="searchInput"]')
+            search.click()
+            search.send_keys(query)
+            enter = self.driver.find_element_by_xpath('//*[@id="search-form"]/fieldset/button')
+            enter.click()
+            assist=Ab()
+            assist.Ab()
+   #news
+    def news():
+      api_address = "https://newsapi.org/v2/top-headlines?country=in&apiKey=ce63b53203fb48669bfb24b4f911b449"
+      json_data = requests.get(api_address).json()
+
+      ar = []
+      for i in range(10):
+          ar.append("Number" + str(i + 1) + "," + json_data["articles"][i]["title"] + ",")
+      return ar
+
+
+
+
+
+    class music():
+        def __init__(self):
+            self.driver = webdriver.Chrome(
+                executable_path='C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
+
+        def play(self, query):
+            self.query = query
+            self.driver.get(url="https://www.youtube.com/results?search_query=" + query)
+            video = self.driver.find_element_by_xpath('//*[@id="video-title"]/yt-formatted-string')
+            video.click()
+            assist=Ab()
+            assist.Ab()
+
+    speak("what can i do for you?")
+    print("what can i do for you?")
+    with sr.Microphone() as source:
+        r.energy_threshold = 10000
+        r.adjust_for_ambient_noise(source, 1.2)
+        print("Listening.....")
+        audio = r.listen(source)
+        text2 = r.recognize_google(audio)
+        #text3 =r.recognize_google(audio)
+
+    if "information" in text2:
+        speak("you need information related to which topic")
+        with sr.Microphone() as source:
+            r.energy_threshold = 10000
+            r.adjust_for_ambient_noise(source, 1.2)
+            print("Listening......")
+            audio = r.listen(source)
+            infor = r.recognize_google(audio)
+            print("searching {} in wikipedia".format(infor))
+            speak("searching {} in wikipedia".format(infor))
+            assist = infow()
+            assist.get_info(infor)
+
+    elif "news" in text2:
+        print("sure sir ,now i will read news for you")
+        speak("sure sir ,now i will read news for you")
+        arr = news()
+        for i in range(len(arr)):
+            speak(arr[i])
+            print(arr[i])
+
+    elif "open" and "application" in text2:
+        print("which appliction you want to open?")
+        speak("which appliction you want to open?")
+        with sr.Microphone() as source:
+            r.energy_threshold = 10000
+            r.adjust_for_ambient_noise(source, 1.2)
+            print("Listening......")
+            audio = r.listen(source)
+            vid1 = r.recognize_google(audio)
+        assist = open_application(vid1)
+        assist.open_application(vid1)
+
+    elif "play" and "video" or "music" in text2:
+        speak("you want me to play which video or music??")
+        with sr.Microphone() as source:
+            r.energy_threshold = 10000
+            r.adjust_for_ambient_noise(source, 1.2)
+            print("Listening......")
+            audio = r.listen(source)
+            vid = r.recognize_google(audio)
+            print("playing {} on youtube".format(vid))
+            speak("playing {} on youtube".format(vid))
+        assist = music()
+        assist.play(vid)
+
+    elif "quit" or "stop" or"bye " in text2:
+        print("ok  good bye ,Have a nice day")
+        speak("ok good bye ,Have nice day")
+
+
+
+
+
+engine = p.init()
+rate = engine.getProperty('rate')
+engine.setProperty('rate', 180)
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+
+
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
+def wishtime():
+    hour=int(datetime.datetime.now().hour)
+    if hour>0 and hour<12:
+        return ("good morning")
+    if hour>=12 and hour<=16:
+        return ("good afternoon")
+    else:
+        return ("good evening")
+today_date=datetime.datetime.now()
+
+r = sr.Recognizer()
+speak(" hello ," +wishtime()+",I'm your voice assistant ")
+speak("today is"+today_date.strftime("%d") + "of" + today_date.strftime("%B")+ ", And its currently " + (today_date.strftime("%I"))+(today_date.strftime("%M"))+(today_date.strftime("%p")))
+speak("how are you?")
+with sr.Microphone() as source:
+    r.energy_threshold = 10000
+    r.adjust_for_ambient_noise(source, 1.2)
+    print("Listening.....")
+    audio = r.listen(source)
+    text = r.recognize_google(audio)
+    print(text)
+if "what" and "about" and "you" in text:
+    speak("i have a good day")
+    print("i have a good day")
+assist=Ab()
+assist.Ab()
+
+
+input("press enter to close")
